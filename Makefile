@@ -1,6 +1,3 @@
-# make -f Makefile 
-# ./Executaval_Principal
-
 all: Executaval_Principal
 Executaval_Principal: TAD.o main.o 
 	gcc -o Executaval_Principal TAD.o main.o
