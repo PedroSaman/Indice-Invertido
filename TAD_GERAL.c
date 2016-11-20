@@ -5,6 +5,72 @@
 #include "TAD_GERAL.h"
 
 
+//	Funções para o uso de lista encadeada
+
+
+struct elemento{
+	TipoChave Palavra;
+	struct elemento *prox;
+};
+typedef struct elemento Elem;
+
+
+Lista* cria_lista(){
+	Lista* li = (Lista*) malloc(sizeof(Lista));
+	
+
+	return li;
+}
+
+
+void libera_lista(Lista* li){
+	if(li!=NULL){
+		Elem* no;
+		while((*li) != NULL){
+			no = *li;
+			*li = (*li)->prox;
+			free(no);
+		}
+		free(li);
+	}
+}
+
+
+int insere_lista_inicio(Lista* li, TipoChave word[]){
+
+	if(li == NULL){ 
+		return 0;
+	}
+
+	Elem* no = (Elem*) malloc(sizeof(Elem));
+	
+	if(no == NULL){
+		return 0;
+	}
+	
+	strcpy(no->Palavra,word);
+	no->prox = (*li);
+	*li = no;
+	return 1;
+}
+
+int consulta_lista_pos(Lista* li, int pos, TipoChave word[]){
+	if(li == NULL || pos<=0) return 0;
+
+	Elem *no = *li;
+	int i = 1;
+	while(no != NULL && i < pos){
+		no = no->prox;
+		i++;
+	}
+	if(no == NULL){
+		return 0;
+	}else{
+		strcpy(word,no->Palavra);
+		return 1;
+	}
+}
+
 int strPontos(char palavra[]){
 	
 	if ((palavra[0] == ',') || (palavra[0] == '.') || (palavra[0] == '?') || (palavra[0] == '!') || (palavra[0] == '-'))
