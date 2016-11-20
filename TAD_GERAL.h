@@ -17,9 +17,20 @@
 	#define N1 50
 
 	// Tamanho do HASH(não sei como fazer isso de forma melhor)
-	#define M 10000
+	#define M 5000
 
 	typedef char TipoChave[C1];
+
+	typedef struct elemento* Lista;
+
+	Lista* cria_lista();
+
+	void libera_lista(Lista* li);
+
+	int insere_lista_inicio(Lista* li, TipoChave word[]);
+
+	int consulta_lista_pos(Lista* li, int pos, TipoChave word[]);
+
 	
 	typedef unsigned TipoPesos[C1];
 
