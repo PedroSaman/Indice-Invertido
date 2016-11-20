@@ -11,6 +11,7 @@
 
 int main(int argc, char *argv[]){
 
+	int systemRet;
 	int x, Tamanho_Max;
 	struct rusage uso_inicio, uso_final;    
 	struct timeval inicio, fim;             /*Variáveis para calcular tempo de execução e uso de memória*/
@@ -24,6 +25,10 @@ int main(int argc, char *argv[]){
 				break;
 			case 'n':
 				if (strcmp (optarg,"HS") == 0){
+					systemRet = system("clear");
+					if(systemRet == -1){
+					  // The system method failed
+					}
 					printf("Hash Simples\n");
 					gettimeofday(&inicio, NULL);
 					CriaIndiceInvertidoHS();
@@ -33,18 +38,19 @@ int main(int argc, char *argv[]){
 					printf("\tTempo de execução %.7lfs\n", difftime(fim.tv_sec, inicio.tv_sec)
 																+ (double) (fim.tv_usec - inicio.tv_usec)/1000000);
 				}else if(strcmp (optarg,"HA") == 0){
+					systemRet = system("clear");
+					if(systemRet == -1){
+					  // The system method failed
+					}
 					printf("Hash Árvore\n");
-					gettimeofday(&inicio, NULL);
 					CriaIndiceInvertidoHA();
-					gettimeofday(&fim, NULL);
-					getrusage(RUSAGE_SELF, &uso_final);
-					printf("\n\n\tMemória usada em Kbytes: %ld\n", uso_final.ru_maxrss);
-					printf("\tTempo de execução %.7lfs\n", difftime(fim.tv_sec, inicio.tv_sec)
-																+ (double) (fim.tv_usec - inicio.tv_usec)/1000000);
 				}
 				break;
 			case 'h':
-					system("clear");
+					systemRet = system("clear");
+					if(systemRet == -1){
+					  // The system method failed
+					}
 					printf("***************************************************\n***********************Ajuda***********************\n***************************************************\n");
 					printf("\t -n Informa qual TAD será utilizado. Disponíveis:\n\tHash Aberto Simples (HS).\n\tHash Arvore (HA).\t");
 					printf("\n\t -t Informa qual o tamanho da maior palavra dentro dos textos\n");
