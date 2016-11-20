@@ -2,66 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
-#include "TAD.h"
+#include "TAD_HS.h"
+#include "TAD_GERAL.h"
 
-int strPontos(char palavra[]){
-	
-	if ((palavra[0] == ',') || (palavra[0] == '.') || (palavra[0] == '?') || (palavra[0] == '!') || (palavra[0] == '-'))
-		return 0;
-	
-	return 1;
-} // OK
-
-void concerta_palavra(char palavra[]){
-	int i,tamanho;
-	char *blank = " ";
-	char word[C];
-	int index = 0;
-
-	while(palavra[index] != '\0'){
-		if ((palavra[index] == ',') || (palavra[index] == '.') || (palavra[index] == '?') || (palavra[index] == '!'))
-			palavra[index] = '\0';
-			
-		index++;
-	}
-
-	tamanho = strlen(palavra);
-
-	while (tamanho < C)
-	{
-		strcat(palavra, blank);
-		tamanho++;
-	}
-	if(tamanho > C){
-		for(i=0; i<C; i++){
-			word[i] = palavra[i];
-		}
-		strcpy(palavra,word);
-		palavra[C] = '\0';
-	}
-}// OK
-
-void NoCaps(char palavra[]){
-	int index = 0;
-	while(palavra[index] != '\0'){
-		if((palavra[index] >= 'A') && (palavra[index] <= 'Z')){
-			palavra[index] += 32;
-		}
-		index++;
-	}
-}// OK
-
-int Transformacao_de_chaves(TipoChave Chave, TipoPesos p){  
-	
-	int i;
-	unsigned int Soma = 0;
-	int comp = strlen(Chave);
-	
-	for(i = 0; i < comp; i++)
-		Soma += (unsigned int)Chave[i] * p[i]; 
-  	
-  	return (Soma % M); 
-}// OK
 
 Apontador Pesquisa(TipoChave Ch, TipoPesos p, TipoDicionario T, int numero_do_doc){ 
 
@@ -82,27 +25,32 @@ Apontador Pesquisa(TipoChave Ch, TipoPesos p, TipoDicionario T, int numero_do_do
 	}
 
 	if (strcmp (T[(Inicial + i) % M].Chave,Ch) == 0){
-		T[((Inicial + i) % M)].qnt_aparicoes[numero_do_doc] +=1;
+			T[((Inicial + i) % M)].qnt_aparicoes[numero_do_doc] +=1;
 		return ((Inicial + i) % M);
 	}
 	else {
 		return M;/*Pesquisa sem sucesso*/ 
 	}
-}// OK 
+} 
 
-void Insere(TipoItem x, TipoPesos p, TipoDicionario T, int numero_do_doc){    
+
+void InsereHS(TipoItem x, TipoPesos p, TipoDicionario T, int numero_do_doc){    
 	
 	unsigned int i = 0;         
 	unsigned int Inicial;
 	char Vazio[C];
+	int posicao;
 
 	for(i = 0; i<C; i++){
 		Vazio[i]='!';
 	}
 	Vazio[C] = '\0';
 	
-	if (Pesquisa(x.Chave, p, T, numero_do_doc) < M)  {
+	posicao = Pesquisa(x.Chave, p, T, numero_do_doc);
+
+	if (posicao < M)  {
 		// Já existe tal palavra
+		
 		return;
 	}
 
@@ -116,23 +64,10 @@ void Insere(TipoItem x, TipoPesos p, TipoDicionario T, int numero_do_doc){
   	} 
   	else 
 		printf("Tabela cheia\n"); 
-}// OK
+}
 
 
-void GeraPesos(TipoPesos p, int n){ 
-
-/* Gera valores randomicos entre 1 e 10.000 */ 
-	int i; 
-	struct timeval semente; 
-
-	gettimeofday(&semente,NULL);
-
-	srand((int)(semente.tv_sec + 1000000*semente.tv_usec)); 
-	for (i = 0; i < n; i++)
-		p[i] =  1+(int) (10000.0*rand()/(RAND_MAX+1.0)); 
-}// OK
-
-void Inicializa_DicionarioHS(TipoDicionario T){  
+void Inicializa_Dicionario(TipoDicionario T){  
 	
 	int i,j; 
 	char Vazio[C];
@@ -148,7 +83,8 @@ void Inicializa_DicionarioHS(TipoDicionario T){
 			T[i].qnt_aparicoes[j]=0;
 		}
 	}
-}// OK
+}
+
 
 void Mostra_Resultado(TipoDicionario T){
 	
@@ -177,7 +113,7 @@ void Mostra_Resultado(TipoDicionario T){
 			printf("\n");
 		}
 	}
-}// OK
+}
 
 
 void CriaIndiceInvertidoHS(){
@@ -200,7 +136,7 @@ void CriaIndiceInvertidoHS(){
 
 	N = Numero_de_arquivos;
 
-	Inicializa_DicionarioHS(Dicionario);
+	Inicializa_Dicionario(Dicionario);
 
 	for(i=0;i<Numero_de_arquivos; i++){
 
@@ -219,16 +155,15 @@ void CriaIndiceInvertidoHS(){
 					concerta_palavra(palavra);
 					strcpy (item.Chave, palavra);
 					GeraPesos(p, C);
-					Insere(item, p, Dicionario, i);
+					InsereHS(item, p, Dicionario, i);
 				}
 				fgetc(fp2);
 			}
 		}
 	}
 
-
 	Mostra_Resultado(Dicionario);
 
 	fclose(fp1);
 	fclose(fp2);
-}// OK
+}
