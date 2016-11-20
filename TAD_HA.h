@@ -1,6 +1,13 @@
 #ifndef TAD_HA
 #define TAD_HA
 	#include "TAD_GERAL.h"
+	#include <unistd.h>
+	#include <sys/time.h>
+	#include <sys/resource.h>
+	#include <time.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <string.h>
 
 	typedef struct NO* ArvBin;
 
@@ -42,5 +49,17 @@
 
 	//	Chama as funções para criar o Dicionario com Hash Arvore.
 	void CriaIndiceInvertidoHA();
+
+	//	FUNçÔES PARA PESQUISA
+
+	float calcula_relevancia_doc(ArvBin* raiz[], Lista* li, int num_termos, int doc_atual);
+
+	float calcula_peso(TipoChave termo, ArvBin* raiz[], int doc_atual);
+
+	int PreOrdem_Pesquisa(ArvBin* raiz, int doc_atual, TipoChave termo, int *quantos_doc_tem);
+
+	int PreOrdem_Somar_termos(ArvBin *raiz, int numero_do_doc, int *contador);
+
+	int documento_mais_relevante(float documentos[]);
 
 #endif
