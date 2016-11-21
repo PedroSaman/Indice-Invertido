@@ -326,11 +326,11 @@ void CriaIndiceInvertidoHA(){
 			Relevancia_por_doc[i] = calcula_relevancia_doc(raiz, li, k, i);
 			printf("relevancia da busca no doc %d = %.4f\n", i+1,Relevancia_por_doc[i] );
 		}	
+		
+		k = documento_mais_relevante(Relevancia_por_doc);	
+
+		printf("o documento arquivo%d.txt é o mais relevante com valor: %f \n",k+1, Relevancia_por_doc[k]);
 	}
-
-	k = documento_mais_relevante(Relevancia_por_doc);	
-
-	printf("o documento arquivo%d.txt é o mais relevante com valor: %f \n",k+1, Relevancia_por_doc[k]);
 
 	fclose(fp1);
 	fclose(fp2);
